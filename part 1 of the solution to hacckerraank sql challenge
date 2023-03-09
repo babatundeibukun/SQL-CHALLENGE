@@ -1,0 +1,9 @@
+SELECT submission_date, hacker_id 
+FROM (
+SELECT submission_date, hacker_id , count_submissions,
+            RANK() OVER( PARTITION BY submission_date ORDER BY count_submissions DESC, hacker_id) AS Ranking 
+FROM(
+SELECT submission_date , hacker_id, COUNT(*) count_submissions
+FROM submissions s
+GROUP BY submission_date, hacker_id) T1)T2 
+WHERE Ranking=1;
